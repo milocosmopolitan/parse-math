@@ -44,6 +44,12 @@ function HTMLParser() {
   function parseNode() {
     // if the first char is a <, parse an Element
     // else parseText
+    if (startsWith('<')) {
+      return parseElement()
+    }
+    else {
+      return parseText();
+    }
   }
 
 
@@ -57,7 +63,7 @@ function HTMLParser() {
     var tagName = parseTagName();
 
     // TODO: parseAttributes
-    var attrs;
+    var attrs = parseAttributes();
 
     // check that we've got an end >
     // 
@@ -65,7 +71,7 @@ function HTMLParser() {
     assert(consumeChar() === '>');
 
     // TODO: Parse all it's children Nodes (using parseNodes)
-    var children;
+    var children = parseNodes();
 
     // check that we have a matching end tag
     // and that the tag is the same 
@@ -100,6 +106,14 @@ function HTMLParser() {
     var attributes = {};
     // PARSE ATTRIBUTES
 
+    for(var i=0; i< 100; i++) {
+      consumeWhiteSpace();
+      if(nextChar() === '>') {break}
+      var attrData = parseAttribute();
+      console.log(attrData)
+      attributes[attrData.name] = attrData.value
+
+    }
 
 
     return attributes;
@@ -110,6 +124,8 @@ function HTMLParser() {
   function parseAttribute() {
     var name, value;
 
+    name = consumeWhile((c)=>(c !== "="));
+    value = parseAttributeValue();
     return {
       name: name,
       value: value
@@ -123,6 +139,13 @@ function HTMLParser() {
     // check for a quote
     // similar to parseTagName - get everything that's not an end-quote: "
     // check for end quote 
+    var value;
+
+    //assert(consumeChar() === '"');
+
+    value = consumeWhile((c)=>(c==='"'));
+    // assert(consumeChar() === '"'); 
+
     return value;
 
   }

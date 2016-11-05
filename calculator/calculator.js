@@ -23,7 +23,13 @@ Calculator.prototype.get = function () {
     followed by any number of numbers (or the period .)
  */
 Calculator.prototype.number = function () {
+  
+  var numStr = '';
 
+  while (/[0-9.]/.test(this.peek())){
+    numStr += this.get();
+  }
+  return Number(numStr);
 }
 
 /* Grammar Rule:
@@ -36,7 +42,16 @@ Calculator.prototype.number = function () {
     - If we see a "-", return the negative of the factor
  */
 Calculator.prototype.factor = function () {
-
+  
+  if(/[0-9]/.test(this.peek())){
+    return this.number();
+  } else if(this.peek() === "("){
+    return this.expression();
+  } else if(this.peek() === "-"){
+    this.get();
+    //console.log(this.number());
+    return -1 * this.number();
+  }
   
 }
 
@@ -52,8 +67,16 @@ Calculator.prototype.term = function () {
     expression = term {(+|-) term}
 */
 Calculator.prototype.expression = function () {
+  debugger;
   var result = this.term();
   
+   while (this.peek() == '+' || this.peek() == '-') {
+    if (this.get() == '+') {
+      result += this.term();
+    } else {
+      result -= this.term();
+    }
+  }
   // TODO: Handle additional term productions if we see a + or - at this point
 
 

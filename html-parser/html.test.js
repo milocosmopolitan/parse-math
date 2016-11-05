@@ -17,7 +17,7 @@ describe('HTMLParser', function () {
         expect(nodes.tagName).toEqual('html');
     });
 
-    xit('should parse nested tags', function () {
+    it('should parse nested tags', function () {
         var nodes = HTMLParser().parse('<html><body></body></html>');
         expect(nodes.children[0].tagName).toEqual('body');
         expect(nodes.children[0].children).toEqual([]);
@@ -25,7 +25,7 @@ describe('HTMLParser', function () {
         expect(nodes.tagName).toEqual('html');
     });
 
-    xit('should parse text nodes', function () {
+    it('should parse text nodes', function () {
         var nodes = HTMLParser().parse('<html>hello</html>');
 
         expect(nodes.children[0].text).toEqual("hello");
@@ -33,7 +33,7 @@ describe('HTMLParser', function () {
         expect(nodes.tagName).toEqual('html');
     });
 
-    xit('should parse attributes with quoted values', function () {
+    it('should parse attributes with quoted values', function () {
         var nodes = HTMLParser().parse('<html lang="us"></html>');
         expect(nodes.children).toEqual([]);
         expect(nodes.attributes).toEqual({
